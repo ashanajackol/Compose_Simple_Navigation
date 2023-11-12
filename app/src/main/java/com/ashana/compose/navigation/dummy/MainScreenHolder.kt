@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -101,15 +103,27 @@ private fun TopNavigationBar(
     navigationUp: () -> Unit,
     modifier: Modifier
 ) {
+    val ctx = LocalContext.current
     TopAppBar(
         title = { Text(stringResource(id = currentScreen.title)) },
         navigationIcon = {
             if (canNavigateBack) {
-                IconButton(onClick =  navigationUp) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "back"
-                    )
+                IconButton(onClick = navigationUp) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "back")
+                }
+            } else {
+                IconButton(onClick = { Toast.makeText(ctx, "menu click", Toast.LENGTH_SHORT).show() }) {
+                    Icon(imageVector = Icons.Filled.Menu, contentDescription = "menu")
+                }
+            }
+        },
+        actions = {
+            if (!canNavigateBack) {
+                IconButton(onClick = {
+                    Toast.makeText(ctx, "my account click", Toast.LENGTH_SHORT).show()
+                }
+                ) {
+                    Icon(imageVector = Icons.Filled.Face, contentDescription = "account")
                 }
             }
         },
