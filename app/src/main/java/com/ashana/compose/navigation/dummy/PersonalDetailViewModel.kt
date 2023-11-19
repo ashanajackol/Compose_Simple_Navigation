@@ -26,4 +26,12 @@ class PersonalDetailViewModel : ViewModel() {
             )
         }
     }
+
+    fun clearAddress() {
+        _uiState.update {
+            it.copy(
+                address = ""
+            )
+        }
+    }
 }

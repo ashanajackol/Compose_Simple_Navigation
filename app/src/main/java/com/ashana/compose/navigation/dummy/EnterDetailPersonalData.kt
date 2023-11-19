@@ -18,17 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterDetailPersonalDataScreen(
+    _address: String,
     onNextButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    var fullName by remember { mutableStateOf<String>("") }
+    var address by remember { mutableStateOf(_address) }
 
     Column(
         modifier = modifier.padding(18.dp),
@@ -38,9 +38,9 @@ fun EnterDetailPersonalDataScreen(
         OutlinedTextField(
             label = { Text(text = "Enter address") },
             placeholder = { Text(text = "No 123 XXX XXX") },
-            value = fullName,
+            value = address,
             onValueChange = {
-                fullName = it
+                address = it
             },
             modifier = Modifier
                 .padding(8.dp)
@@ -56,12 +56,4 @@ fun EnterDetailPersonalDataScreen(
             content = { Text(text = "Next")},
             onClick = { onNextButtonClick("ashana") })
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-private fun PreviewEditerDetailName() {
-    EnterDetailPersonalDataScreen(
-        onNextButtonClick = {}
-    )
 }

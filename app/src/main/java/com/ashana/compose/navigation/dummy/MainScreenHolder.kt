@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,9 +44,8 @@ fun MainScreenHolderScreen(
 ) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = Screens.valueOf(
-        backStackEntry?.destination?.route ?: Screens.ENTER_NAME.name
-    )
+    val currentScreen = Screens.valueOf(backStackEntry?.destination?.route ?: Screens.ENTER_NAME.name)
+    val viewModelState by personalDetailViewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -53,12 +53,11 @@ fun MainScreenHolderScreen(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigationUp = { navController.navigateUp() },
+                clearAddress = { personalDetailViewModel.clearAddress() },
                 modifier = modifier
             )
         }
     ) { innerPadding ->
-
-        val viewModelState by personalDetailViewModel.uiState.collectAsState()
 
         NavHost(
             navController = navController,
@@ -75,6 +74,7 @@ fun MainScreenHolderScreen(
             }
             composable(route = Screens.ENTER_PERSONAL_DATA.name) {
                 EnterDetailPersonalDataScreen(
+                    _address = viewModelState.address,
                     onNextButtonClick = {
                         personalDetailViewModel.addAddress(it)
                         navController.navigate(Screens.VIEW_SUMMARY.name)
@@ -84,7 +84,7 @@ fun MainScreenHolderScreen(
             composable(route = Screens.VIEW_SUMMARY.name) {
                 val ctx = LocalContext.current
                 ViewSummary(
-                    fullName = viewModelState.name,
+                    fullName = "{${viewModelState.name} and {${viewModelState.address}}",
                     onButtonClick = {
                         Toast.makeText(ctx, "The end", Toast.LENGTH_SHORT).show()
                         navController.popBackStack(Screens.ENTER_NAME.name, false)
@@ -101,6 +101,7 @@ private fun TopNavigationBar(
     currentScreen: Screens,
     canNavigateBack: Boolean,
     navigationUp: () -> Unit,
+    clearAddress: (String) -> Unit,
     modifier: Modifier
 ) {
     val ctx = LocalContext.current
@@ -124,6 +125,14 @@ private fun TopNavigationBar(
                 }
                 ) {
                     Icon(imageVector = Icons.Filled.Face, contentDescription = "account")
+                }
+            }
+            if (currentScreen == Screens.ENTER_PERSONAL_DATA) {
+                IconButton(onClick = {
+                    Toast.makeText(ctx, "clear", Toast.LENGTH_SHORT).show()
+                    clearAddress("")
+                }) {
+                    Icon(imageVector = Icons.Filled.Clear, contentDescription = "clear")
                 }
             }
         },
