@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnterDetailPersonalDataScreen(
-    _address: String,
+    address: String,
     onNextButtonClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    var address by remember { mutableStateOf(_address) }
+    var newAddress by remember { mutableStateOf(address) }
 
     Column(
         modifier = modifier.padding(18.dp),
@@ -38,9 +38,9 @@ fun EnterDetailPersonalDataScreen(
         OutlinedTextField(
             label = { Text(text = "Enter address") },
             placeholder = { Text(text = "No 123 XXX XXX") },
-            value = address,
+            value = newAddress,
             onValueChange = {
-                address = it
+                newAddress = it
             },
             modifier = Modifier
                 .padding(8.dp)
@@ -54,6 +54,6 @@ fun EnterDetailPersonalDataScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             content = { Text(text = "Next")},
-            onClick = { onNextButtonClick("ashana") })
+            onClick = { onNextButtonClick(newAddress) })
     }
 }

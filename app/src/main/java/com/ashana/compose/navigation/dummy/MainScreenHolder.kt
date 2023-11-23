@@ -32,7 +32,8 @@ import androidx.navigation.compose.rememberNavController
 enum class Screens(@StringRes val title: Int) {
     ENTER_NAME(title = R.string.enter_detail_name),
     ENTER_PERSONAL_DATA(title = R.string.enter_detail_personal_data),
-    VIEW_SUMMARY(title = R.string.view_summary)
+    VIEW_SUMMARY(title = R.string.view_summary),
+    PROFILE(title = R.string.go_to_profile)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -53,6 +54,7 @@ fun MainScreenHolderScreen(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigationUp = { navController.navigateUp() },
+                navigateToProfile = { navController.navigate(Screens.PROFILE.name) },
                 clearAddress = { personalDetailViewModel.clearAddress() },
                 modifier = modifier
             )
@@ -74,7 +76,7 @@ fun MainScreenHolderScreen(
             }
             composable(route = Screens.ENTER_PERSONAL_DATA.name) {
                 EnterDetailPersonalDataScreen(
-                    _address = viewModelState.address,
+                    address = viewModelState.address,
                     onNextButtonClick = {
                         personalDetailViewModel.addAddress(it)
                         navController.navigate(Screens.VIEW_SUMMARY.name)
@@ -91,6 +93,9 @@ fun MainScreenHolderScreen(
                     }
                 )
             }
+            composable(route = Screens.PROFILE.name) {
+                ProfileScreen()
+            }
         }
     }
 }
@@ -101,6 +106,7 @@ private fun TopNavigationBar(
     currentScreen: Screens,
     canNavigateBack: Boolean,
     navigationUp: () -> Unit,
+    navigateToProfile: () -> Unit,
     clearAddress: (String) -> Unit,
     modifier: Modifier
 ) {
@@ -120,10 +126,7 @@ private fun TopNavigationBar(
         },
         actions = {
             if (!canNavigateBack) {
-                IconButton(onClick = {
-                    Toast.makeText(ctx, "my account click", Toast.LENGTH_SHORT).show()
-                }
-                ) {
+                IconButton(onClick = navigateToProfile) {
                     Icon(imageVector = Icons.Filled.Face, contentDescription = "account")
                 }
             }

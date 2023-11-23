@@ -3,4 +3,5 @@
     <string name="enter_detail_name">Enter Name</string>
     <string name="enter_detail_personal_data">Enter Personal Data</string>
     <string name="view_summary">view Summary</string>
+    <string name="go_to_profile">My Profile</string>
 </resources>

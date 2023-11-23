@@ -20,12 +20,14 @@ class PersonalDetailViewModel : ViewModel() {
     }
 
     fun addAddress(address: String) {
-        _uiState.update {
-            it.copy(
+        _uiState.update { currentState ->
+            currentState.copy(
                 address = address
             )
         }
     }
+
+    fun getAddress() = uiState.value.address
 
     fun clearAddress() {
         _uiState.update {
